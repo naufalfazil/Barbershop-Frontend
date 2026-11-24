@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Alamat backend CukurIn yang berjalan di komputer lokal.
-  static const String baseUrl = 'http://localhost:5000/api';
+  static const String baseUrl = 'http://localhost:3000/api';
 
   // Nama kunci untuk menyimpan JWT.
   static const String _tokenKey = 'token';

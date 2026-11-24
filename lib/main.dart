@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_asas/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "CukurIn",
       home: Scaffold(
-        body: ,
+        body: LoginPage(),
       ),
     );
   }
