@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_asas/pages/customer/home_page.dart';
 import 'package:frontend_asas/pages/register_page.dart';
 import '../service/api.dart';
 
@@ -28,54 +29,70 @@ class _LoginPageState extends State<LoginPage> {
   static const Color secondaryText = Color(0xFFAAAAAA); 
 
   // LOGIN
-  Future<void> login() async {
-    if (!_formKey.currentState!.validate()) return;
+  
+Future<void> login() async {
+  if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      loading = true;
-    });
+  setState(() {
+    loading = true;
+  });
 
-    try {
-      final response = await ApiService.login(
-        email: emailController.text.trim(),
-        password: passwordController.text,
-      );
+  try {
+    final response = await ApiService.login(
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
 
-      if (!mounted) return;
+    if (!mounted) return;
 
-      final user = response['user'];
-      final role = user['role'];
+    final user = response['user'];
+    final role = user['role'];
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Login berhasil. Selamat datang, ${user['name']}!',
+    if (role == 'customer') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(
+            userName: user['name'],
           ),
-          backgroundColor: teal,
         ),
       );
-
-      // TODO: Navigasi ke dashboard berdasarkan role.
-      print('Role pengguna: $role');
-    } catch (e) {
-      if (!mounted) return;
-
+    } else if (role == 'admin') {
+      // TODO: Navigasi ke AdminPage
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString().replaceFirst('Exception: ', ''),
-          ),
-          backgroundColor: Colors.red,
+        const SnackBar(
+          content: Text('Dashboard Admin belum tersedia.'),
         ),
       );
-    } finally {
-      if (mounted) {
-        setState(() {
-          loading = false;
-        });
-      }
+    } else if (role == 'kasir') {
+      // TODO: Navigasi ke KasirPage
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Dashboard Kasir belum tersedia.'),
+        ),
+      );
+    } else {
+      throw Exception('Role pengguna tidak dikenali.');
+    }
+  } catch (e) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          e.toString().replaceFirst('Exception: ', ''),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+  } finally {
+    if (mounted) {
+      setState(() {
+        loading = false;
+      });
     }
   }
+}
 
   // DISPOSE CONTROLLER
   @override
